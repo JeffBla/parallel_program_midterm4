@@ -162,7 +162,7 @@ int main(int argc, char *argv[]) {
 
     for (int i = 0; i < t && numElement[myid] != 0; i++) {
         PredictNext(local_n_arr[myid], buffer_row);
-        {
+/*        {
             for (int k = buffer_row; k < local_n_arr[myid] + buffer_row; k++) {
                 for (int j = 0; j < m; j++) {
                     printf("%d ", local_A_next[k * m + j]);
@@ -170,7 +170,7 @@ int main(int argc, char *argv[]) {
             }
             printf("\n------------------------------\n");
             fflush(stdout);
-        }
+        } */
         memcpy(local_A, local_A_next, sizeof(int) * (local_n_arr[myid] + buffer_row * 2) * m);
         Update_local_A(myid, numprocs, numElement, buffer_row);
     }
@@ -178,13 +178,13 @@ int main(int argc, char *argv[]) {
     MPI_Gatherv(local_A + buffer_row * m, numElement[myid], MPI_INT,
                 A, numElement, disp_arr, MPI_INT, 0, MPI_COMM_WORLD);
 
-    // if (myid == 0) {
-    //     for (int i = 0; i < n; i++) {
-    //         for (int j = 0; j < m; j++) {
-    //             printf("%d ", A[i * m + j]);
-    //         }
-    //     }
-    // }
+     if (myid == 0) {
+         for (int i = 0; i < n; i++) {
+             for (int j = 0; j < m; j++) {
+                 printf("%d ", A[i * m + j]);
+             }
+         }
+     }
 
     MPI_Finalize();
     return 0;
